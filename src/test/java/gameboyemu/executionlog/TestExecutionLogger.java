@@ -1,13 +1,8 @@
-package executionlog;
+package gameboyemu.executionlog;
 
-import cpu.*;
+import gameboyemu.cpu.*;
 import gameboyemu.cpu.CpuState;
 import gameboyemu.cpu.LR35902StateBased;
-import gameboyemu.executionlog.ExecutionLogger;
-import gameboyemu.executionlog.ExecutionUnit;
-import gameboyemu.executionlog.Loop;
-import gameboyemu.executionlog.SequentialExecutionUnit;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 

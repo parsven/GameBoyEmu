@@ -1,11 +1,6 @@
-package system;
+package gameboyemu.system;
 
 import gameboyemu.game.MBC;
-import gameboyemu.system.HRAM;
-import gameboyemu.system.IoPorts;
-import gameboyemu.system.MemoryController;
-import gameboyemu.system.VRAM;
-import gameboyemu.system.WRAM;
 import org.junit.Test;
 
 import static org.mockito.Mockito.*;

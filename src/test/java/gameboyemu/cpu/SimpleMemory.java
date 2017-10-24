@@ -1,6 +1,4 @@
-package cpu;
-
-import gameboyemu.cpu.VirtualMemory16;
+package gameboyemu.cpu;
 
 /**
  * Created by IntelliJ IDEA.

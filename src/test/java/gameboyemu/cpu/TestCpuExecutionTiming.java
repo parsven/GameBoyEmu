@@ -1,7 +1,5 @@
-package cpu;
+package gameboyemu.cpu;
 
-import gameboyemu.cpu.BreakPointException;
-import gameboyemu.cpu.LR35902StateBased;
 import org.junit.Test;
 
 import java.util.Collections;

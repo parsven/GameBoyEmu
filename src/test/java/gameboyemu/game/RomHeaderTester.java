@@ -1,8 +1,5 @@
-package game;
+package gameboyemu.game;
 
-import gameboyemu.game.MBC0;
-import gameboyemu.game.Rom;
-import gameboyemu.game.Tetris;
 import org.junit.Test;
 
 import java.io.IOException;

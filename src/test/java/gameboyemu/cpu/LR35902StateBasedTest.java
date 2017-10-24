@@ -1,6 +1,5 @@
-package cpu;
+package gameboyemu.cpu;
 
-import gameboyemu.cpu.LR35902StateBased;
 import org.junit.Before;
 import org.junit.Test;
 

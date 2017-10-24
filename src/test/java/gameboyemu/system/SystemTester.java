@@ -1,15 +1,9 @@
-package system;
+package gameboyemu.system;
 
 import gameboyemu.cpu.LR35902StateBased;
 import gameboyemu.game.MBC;
 import gameboyemu.game.Rom;
 import gameboyemu.game.Tetris;
-import gameboyemu.system.HRAMimpl;
-import gameboyemu.system.IoPorts;
-import gameboyemu.system.LCDController;
-import gameboyemu.system.MemoryController;
-import gameboyemu.system.Utils;
-import gameboyemu.system.WRAMimpl;
 
 /**
  * Created by IntelliJ IDEA.
