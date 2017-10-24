@@ -1,2 +1,7 @@
 out/
 out.txt
+target/
+.idea/workspace.xml
+.idea/libraries/
+project/target/
+
