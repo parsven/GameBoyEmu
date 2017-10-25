@@ -78,6 +78,10 @@ public class LR35902StateBased implements CpuState, Cpu {
         return SP;
     }
 
+    public void setSP(int sp) {
+	    SP = sp;
+    }
+
     public int getPC() {
         return pc;
     }

@@ -85,9 +85,9 @@ public class LR35902StateBasedTest {
         assertEquals(28, cpu.getRegL());
      }
 
-    private void StepCPU_AssertPcValueAndCycles(int expectedPcIncrement, int expectedCycles) {
+    private void StepCPU_AssertPcValueAndCycles(int expectedPc, int expectedCycles) {
         int cycles = cpu.step();
-        assertEquals(expectedPcIncrement, cpu.getPc());
+        assertEquals(expectedPc, cpu.getPc());
         assertEquals(expectedCycles, cycles);
     }
 
@@ -2624,9 +2624,7 @@ public class LR35902StateBasedTest {
         //RST 00H
         //1  16
         //- - - -
-        mem.init(0x34, 0x12, 0xc7);
-        cpu.setPC(2);
-        StepCPU_AssertPcValueAndCycles(0x1234, 16);
+        testRST(0xc7, 0);
     }
 
 
@@ -2704,9 +2702,7 @@ public class LR35902StateBasedTest {
         //RST 08H
         //1  16
         //- - - -
-        mem.init(0xcf);
-        mem.writeWord(0x08, 0x1234);
-        StepCPU_AssertPcValueAndCycles(0x1234, 16);
+        testRST(0xcf, 8);
     }
 
     @Test public void testOpCode0xD0() {
@@ -2784,9 +2780,7 @@ public class LR35902StateBasedTest {
         //RST 10H
         //1  16
         //- - - -
-        mem.init(0xd7);
-        mem.writeWord(0x10, 0x1234);
-        StepCPU_AssertPcValueAndCycles(0x1234, 16);
+        testRST(0xd7, 0x10);
     }
 
     @Test public void testOpCode0xD8() {
@@ -2853,9 +2847,7 @@ public class LR35902StateBasedTest {
         //RST 18H
         //1  16
         //- - - -
-        mem.init(0xdf);
-        mem.writeWord(0x18, 0x1234);
-        StepCPU_AssertPcValueAndCycles(0x1234, 16);
+        testRST(0xdf, 0x18);
     }
 
     @Test public void testOpCode0xE0() {
@@ -2921,9 +2913,7 @@ public class LR35902StateBasedTest {
         //RST 20H
         //1  16
         //- - - -
-        mem.init(0xe7);
-        mem.writeWord(0x20, 0x1234);
-        StepCPU_AssertPcValueAndCycles(0x1234, 16);
+        testRST(0xe7, 0x20);
     }
 
     @Test public void testOpCode0xE8() {
@@ -2980,9 +2970,7 @@ public class LR35902StateBasedTest {
         //RST 28H
         //1  16
         //- - - -
-        mem.init(0xef);
-        mem.writeWord(0x28, 0x1234);
-        StepCPU_AssertPcValueAndCycles(0x1234, 16);
+        testRST(0xef, 0x28);
     }
 
     @Test public void testOpCode0xF0() {
@@ -3063,9 +3051,7 @@ public class LR35902StateBasedTest {
         //RST 30H
         //1  16
         //- - - -
-        mem.init(0xf7);
-        mem.writeWord(0x30, 0x1234);
-        StepCPU_AssertPcValueAndCycles(0x1234, 16);
+        testRST(0xf7, 0x30);
     }
 
     @Test public void testOpCode0xF8() {
@@ -3138,9 +3124,14 @@ public class LR35902StateBasedTest {
         //RST 38H
         //1  16
         //- - - -
-        mem.init(0xff);
-        mem.writeWord(0x38, 0x1234);
-        StepCPU_AssertPcValueAndCycles(0x1234, 16);
+        testRST(0xff, 0x38);
+    }
+
+    private void testRST(int opCode, int expectedPc) {
+        mem.init(opCode);
+        cpu.setSP(3);
+        StepCPU_AssertPcValueAndCycles(expectedPc, 16);
+        assertEquals(1, mem.readWord(1));
     }
 
     private void testConditionalRet(SourceFlagSetter sfs, int opCode) {
