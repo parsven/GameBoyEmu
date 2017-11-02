@@ -33,7 +33,7 @@ public class CustomPaintingPane extends JPanel {
     public void setPixels(int [] backBuffer) {
         WritableRaster writableRaster = image.getRaster();
         writableRaster.setPixels(0, 0, (int) size.getWidth(), (int) size.getHeight(), backBuffer);
-        System.err.println("writeableRaster.getWidth=" + writableRaster.getWidth());
+//        System.err.println("writeableRaster.getWidth=" + writableRaster.getWidth());
 
     }
 

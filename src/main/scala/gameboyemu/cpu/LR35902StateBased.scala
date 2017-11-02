@@ -2,6 +2,8 @@ package gameboyemu.cpu
 
 import java.util
 
+import gameboyemu.system.Utils
+
 /**
   * Created by IntelliJ IDEA.
   * User: par
@@ -10,13 +12,12 @@ import java.util
   * To change this template use File | Settings | File Templates.
   */
 
-class LR35902StateBased(val vm: VirtualMemory16) extends CpuState with Cpu {
+class LR35902StateBased(val vm: VirtualMemory16) extends CpuState with Cpu with InterruptLines {
   private var flagZ = false
   private var flagN = false
   private var flagH = false
   private var flagC = false
   private var flagI = false
-  private var flagIME = false
   private var pc = 0
   private var A = 0
   private var BC = 0
@@ -26,12 +27,20 @@ class LR35902StateBased(val vm: VirtualMemory16) extends CpuState with Cpu {
   private var stopped = false
   private var halted = false
 
+  override def requestVblankIrq(): Unit = {
+    if (flagI) {
+      System.err.println("VBLANK IRQ HANDLED!")
+      SP -= 2
+      vm.writeWord(SP, pc)
+      pc = 0x40
+    }
+  }
+  def requestLCDCStatusIrq(): Unit = ???
+
   @throws[BreakPointException]
   override def executeScanline(carry: Int, breakPoints: util.Set[Integer]): Int = {
     var cyclesLeftOnScanLine = 456 - carry
-    while ( {
-      cyclesLeftOnScanLine > 0
-    }) {
+    while ( cyclesLeftOnScanLine > 0 && !halted) {
       if (breakPoints.contains(pc)) throw new BreakPointException
       cyclesLeftOnScanLine -= step
     }
@@ -827,8 +836,6 @@ class LR35902StateBased(val vm: VirtualMemory16) extends CpuState with Cpu {
         return 8
       case 0x76 =>
         halted = true
-        pc += 1
-        pc &= 0xffff
         return 4
       case 0x77 =>
         vm.writeByte(HL, getRegA)
@@ -1261,7 +1268,7 @@ class LR35902StateBased(val vm: VirtualMemory16) extends CpuState with Cpu {
         pc = vm.readWord(SP)
         SP += 2
         SP &= 0xffff
-        flagIME = true
+        flagI = true
         return 16
       case 0xda =>
         if (flagC) {
@@ -1711,8 +1718,6 @@ class LR35902StateBased(val vm: VirtualMemory16) extends CpuState with Cpu {
 
   def getRegA: Int = A
 
-  def getFlagIME: Boolean = flagIME
-
   def isStopped: Boolean = stopped
 
   def isHalted: Boolean = halted
@@ -1739,23 +1744,23 @@ class LR35902StateBased(val vm: VirtualMemory16) extends CpuState with Cpu {
     throw new IllegalStateException
   }
 
-  def setRegisterValueForCBOpCode(opCode: Int, `val`: Int): Unit = opCode & 0x07 match {
+  def setRegisterValueForCBOpCode(opCode: Int, value: Int): Unit = opCode & 0x07 match {
     case 0x00 =>
-      setRegB(`val`)
+      setRegB(value)
     case 0x01 =>
-      setRegC(`val`)
+      setRegC(value)
     case 0x02 =>
-      setRegD(`val`)
+      setRegD(value)
     case 0x03 =>
-      setRegE(`val`)
+      setRegE(value)
     case 0x04 =>
-      setRegH(`val`)
+      setRegH(value)
     case 0x05 =>
-      setRegL(`val`)
+      setRegL(value)
     case 0x06 =>
-      vm.writeByte(HL, `val`)
+      vm.writeByte(HL, value)
     case 0x07 =>
-      setRegA(`val`)
+      setRegA(value)
   }
 
   def getBitFromOpCode(opCode: Int): Int = (opCode & 0x38) >> 3

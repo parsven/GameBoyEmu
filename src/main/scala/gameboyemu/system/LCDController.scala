@@ -2,6 +2,8 @@ package gameboyemu.system
 
 import java.util
 
+import gameboyemu.cpu.InterruptLines
+
 /**
   * Created by IntelliJ IDEA.
   * User: par
@@ -13,11 +15,20 @@ class LCDController extends IoPorts {
   private var currentScanLine = 0
   private var lcdc = 0
   private var mc : MemoryController = _
+  private var cpuInteruptLines : InterruptLines = _
   private var joyselect = 0
+  private var interuptEnable = 0
 
   def setMemoryController(mc: MemoryController): Unit = this.mc = mc
 
-  def advanceScanLine(): Unit = currentScanLine += 1
+  def setCpuInteruptLines(il : InterruptLines): Unit = this.cpuInteruptLines = il
+
+  def advanceScanLine(): Unit = {
+    currentScanLine += 1
+    if(currentScanLine == 144 && mc.isVblankInteruptEnabled) {
+      cpuInteruptLines.requestVblankIrq()
+    }
+  }
 
   def resetScanLine(): Unit = currentScanLine = 0
 
@@ -26,6 +37,9 @@ class LCDController extends IoPorts {
       joyselect = b & 0x30
     case 0xFF40 => // LCDC
       lcdc = b
+    case 0xFF41 => //STAT - LCDC Status (R/W)
+      System.err.println("STAT write 0xFF41 : " + Utils.byteIntToHexString(b))
+      interuptEnable = b & 0x7c
     case 0xFF46 =>
       System.err.println("OAM DMA!!")
     case _ => //Ignore sofar..
@@ -38,6 +52,14 @@ class LCDController extends IoPorts {
       return currentScanLine
     }
     if (adress == 0xff00) return 0xcf | joyselect
+
+
+    if(adress == 0xff41) {
+
+      System.err.println("Reading 0xff41, STAT register!")
+      return interuptEnable;
+    }
+
     System.err.println("readByte(" + Utils.wordIntToHexString(adress) + ") -> 0")
     0 //To change body of implemented methods use File | Settings | File Templates.
   }

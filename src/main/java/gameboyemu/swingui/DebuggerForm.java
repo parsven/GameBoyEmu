@@ -128,6 +128,7 @@ public class DebuggerForm {
 
         debuggerForm.cpu = new LR35902StateBased(memoryController);
         debuggerForm.system = new GBSystem(memoryController, debuggerForm.cpu, debuggerForm.lcdController);
+        debuggerForm.lcdController.setCpuInteruptLines(debuggerForm.cpu);
 
         System.err.println("Starting");
         debuggerForm.cpu.startup();
@@ -138,6 +139,13 @@ public class DebuggerForm {
     }
 
     LR35902StateBased cpu;
+
+    private void updateField(JLabel label, JLabel value, String newValue) {
+        String oldText = value.getText();
+        value.setText(newValue);
+        setBold(!oldText.equals(newValue), label, value);
+
+    }
 
     private void updateField(JLabel label, JLabel value, int newValue) {
         String oldText = value.getText();
@@ -152,7 +160,10 @@ public class DebuggerForm {
         updateField(DElabel, DEvalue, cpu.getDE());
         updateField(HLlabel, HLvalue, cpu.getHL());
         updateField(SPlabel, SPvalue, cpu.getSP());
-        updateField(PClabel, PCvalue, cpu.getPC());
+
+        String cpuDesc = Utils.byteIntToHexString(cpu.getPC()) + " (" + Utils.byteIntToHexString(this.cpu.vm().readByte(cpu.getPC())) + ")";
+
+        updateField(PClabel, PCvalue,cpuDesc);
 
         updateRegisterDescField(lcdController);
         updateDisasm(cpu.getPC());

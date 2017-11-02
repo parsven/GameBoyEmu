@@ -22,7 +22,7 @@ class MemoryController(val mbc: MBC, val workRam: WRAM, val hiRam: HRAM, val vid
   private var interruptReg = 0
 
   override def writeByte(address: Int, value: Int): Unit = if ((address & 0x8000) == 0) mbc.writeByte(address, value)
-  else if (address == 0xffff) interruptReg = value
+  else if (address == 0xffff) {interruptReg = value; System.out.println("0xffff = " + Utils.byteIntToHexString(value))}
   else if (address >= 0xff80) hiRam.writeByte(address, value)
   else if (address >= 0xff00) ioPorts.writeByte(address, value)
   else if ((address & 0x4000) != 0) workRam.writeByte(address & 0xdfff, value)
@@ -47,4 +47,6 @@ class MemoryController(val mbc: MBC, val workRam: WRAM, val hiRam: HRAM, val vid
   else if (address >= 0xff00) MemoryController.readWord(ioPorts, address)
   else if ((address & 0x4000) != 0) MemoryController.readWord(workRam, address & 0xdfff)
   else 0
+
+  override def isVblankInteruptEnabled : Boolean = (interruptReg & 0x01) != 0
 }
