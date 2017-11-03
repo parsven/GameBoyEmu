@@ -1606,7 +1606,7 @@ public class LR35902StateBasedTest {
         //1  4
         //- - - -
         mem.init(0x76);
-        StepCPU_AssertPcValueAndCycles(1, 4);
+        StepCPU_AssertPcValueAndCycles(0, 4);
         assertTrue(cpu.isHalted());
     }
 
@@ -2803,7 +2803,7 @@ public class LR35902StateBasedTest {
         cpu.step();
         assertEquals(0x100, cpu.getPc());
         assertEquals(0x04, cpu.getRegSP());
-        assertTrue(cpu.getFlagIME());
+        assertTrue(cpu.getI());
     }
 
     @Test public void testOpCode0xDA() {
