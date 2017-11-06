@@ -11,7 +11,4 @@ trait VirtualMemory16 extends VirtualMemory {
   def writeWord(adress: Int, b: Int): Unit
 
   def readWord(adress: Int): Int
-
-  def isVblankInteruptEnabled : Boolean
-
 }

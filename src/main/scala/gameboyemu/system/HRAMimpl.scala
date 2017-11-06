@@ -26,4 +26,6 @@ class HRAMimpl extends HRAM {
     val hiByte = readByte(address + 1)
     (hiByte << 8) | lowByte
   }
+
+  override def getRam : Array[Int]= mem
 }

@@ -9,4 +9,6 @@ import gameboyemu.cpu.VirtualMemory
   * Time: 8:47 PM
   * To change this template use File | Settings | File Templates.
   */
-trait HRAM extends VirtualMemory {}
+trait HRAM extends VirtualMemory {
+  def getRam : Array[Int]
+}

@@ -48,5 +48,5 @@ class MemoryController(val mbc: MBC, val workRam: WRAM, val hiRam: HRAM, val vid
   else if ((address & 0x4000) != 0) MemoryController.readWord(workRam, address & 0xdfff)
   else 0
 
-  override def isVblankInteruptEnabled : Boolean = (interruptReg & 0x01) != 0
+  def isVblankInteruptEnabled : Boolean = (interruptReg & 0x01) != 0
 }

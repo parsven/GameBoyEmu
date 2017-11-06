@@ -341,6 +341,15 @@
         <border type="etched"/>
         <children/>
       </grid>
+      <component id="68bd4" class="javax.swing.JCheckBox" binding="continousCheckBox" default-binding="true">
+        <constraints>
+          <grid row="4" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <text value="continous"/>
+        </properties>
+      </component>
     </children>
   </grid>
 </form>
